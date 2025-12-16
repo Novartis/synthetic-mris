@@ -1,0 +1,22 @@
+paths:
+  root_path: ${data_basedir}
+  training_data: ${data.paths.root_path}/IXI_dataset_pickle/mni_space
+  clinical_data: ${data.paths.root_path}/clinical/demographic_info_IXI_postprocessed_cluster.csv  # demographic_info_IXI_postprocessed.csv
+
+dataloader_params:
+  num_workers: 4 #16, 8 or 4, type=int, set number of workers for the dataloader (depend on the number of GPU called in the job, usually 1GPU can work well with 4 n_workers)
+  train_val_split: Null # percentage to use for splitting the data into train and validation (used in dataloaders.make_train_validation_split)
+
+image_processing:
+  data_crop_size: Null #256 #  type=int, sets the center crop dimensions for the dataloader, Null if data input are in the expected size
+  crop_mode: vertical_center # type=str,Select which part of the image to use when cropping
+                        # choices=['vertical_top', 'vertical_center', 'vertical_bottom']
+  data_downsampling_factor: 1 # type=int, downsampling factor for the dataloader
+
+clinical_data_processing:
+  columns:  # list of columns to read from CSV -> column: type
+    IXI_ID: str
+    AGE_categ_int: int_category
+    gender_m0_f1: category
+  # column that has the subject identifier
+  identifier: IXI_ID

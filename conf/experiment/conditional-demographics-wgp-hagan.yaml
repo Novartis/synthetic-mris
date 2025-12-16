@@ -1,0 +1,9 @@
+# @package _global_
+experiment_name: conditional-demographics-wgp-hagan
+model:
+  net:
+    _target_: model_architecture.ha_gan.WGP_HAGAN
+
+  conditions:
+    - gender_m0_f1
+    - AGE_categ_int

@@ -1,0 +1,12 @@
+# @package _global_
+experiment_name: unconditional-wgp-hagan-with-enc-unatt
+
+model:
+  net:
+    _target_: model_architecture.ha_gan.WGP_HAGAN
+
+  conditions: []
+
+  encoders:
+    add_encoder: True
+    attach_encoder: False

@@ -1,0 +1,20 @@
+# @package _global_
+
+# specify these two on the command line
+runs_basedir: ???
+data_basedir: ???
+seed: 42
+
+# experiment name for logging / job identification
+experiment_name: default
+
+# copy into variable so we can log it later
+job_directory: ${hydra:run.dir}
+
+defaults:
+  - _self_
+  - hydra: default_hydra
+  - data: default_data
+  - model: default_model
+  - train: default_train
+  - evaluate: default_evaluate

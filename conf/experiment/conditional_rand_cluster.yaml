@@ -1,0 +1,8 @@
+# @package _global_
+experiment_name: conditional-umap-cluster-wgp-hagan
+model:
+  net:
+    _target_: model_architecture.ha_gan.WGP_HAGAN
+
+  conditions:
+    - rand_cluster

@@ -1,0 +1,17 @@
+# @package _global_
+experiment_name: unconditional-wgp-hagan-with-enc
+
+model:
+  net:
+    _target_: model_architecture.ha_gan.WGP_HAGAN
+
+  architecture:
+    # options to train high/low resolution branches:
+    train_generators: ["all"] # define which generator (gen) to train (model includes 3 gen), possible options are ["gen_a","gen_l","gen_h", "all"] 
+    loss_fcn: "all" # specify if the loss fcn should include only high/low or both losses. possible options: ["low_res_only", "high_res_only", "all"]
+      
+  conditions: []
+
+  encoders:
+    add_encoder: True
+    attach_encoder: True

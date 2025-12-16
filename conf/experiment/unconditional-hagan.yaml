@@ -1,0 +1,8 @@
+# @package _global_
+experiment_name: unconditional-hagan
+
+model:
+  net:
+    _target_: model_architecture.ha_gan.HAGAN
+  
+  conditions: []

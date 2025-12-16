@@ -1,0 +1,35 @@
+continue_train: false  # to pick up latest checkpoint and continue, set this to a path or specific checkpoint file
+pretrained_model_weights: null # type=str, Set path to pretrained model for transfer learning
+checkpoint_callback_save_top_k: -1 # save all model checkpoints. This takes a lot of space!
+
+torch_matmul_precision: high   # set to medium for slightly better speed on tensor cores, probably affects accuracy
+
+# trainer input: make sure they are all valid inputs
+trainer: # trainer specific flags, note make sure they are all valid! https://lightning.ai/docs/pytorch/stable/common/trainer.html#
+  _target_: pytorch_lightning.trainer.Trainer
+  default_root_dir: ${hydra:run.dir}/checkpoints
+  max_epochs: -1 #1000 # type=int, maximum number of epochs
+  accelerator: auto # set to gpu or cpu. On M1/M2/M3 Macs, this only works with pytorch nightly and CPU fallback
+  devices: auto
+  # strategy: ddp_find_unused_parameters_true  # use this for multi-gpu training
+  precision: 32 # bf16-mixed / 16 bit will slow down convergence # type=int|str, Set precision of training explicitly
+
+# optimizer settings
+optimizers: 
+  weight_decay: 0 # type=float, weight decay for all optimizers
+  gen_lr: 0.0001 # type=float, adam: learning rate for the generators"
+  disc_lr: 0.0004 # type=float, adam: learning rate for the discriminators
+  enc_lr: 0.0004 # vfloat, adam: learning rate for the encoders
+  b1: 0 # type=float, adam: decay of first order momentum of gradient
+  b2: 0.999 # type=float,adam: decay of first order momentum of gradient
+  batch_size: 2 # 2 or 4, type=int, size of the batches, with small datasets, less is more here. Needs to be >= n_gpus
+  lambda_cls: 10 # Mixture hyperparameter for class loss. Defaults to 10, an empirical value from literature.
+  lambda_w: 10 # Mixture hyperparameter for gradient penalty loss. Defaults to 10, an empirical value from literature.
+
+# logging settings
+log_num_validation_images: 4 # type=int, help="Set the number of images stored generated for validation/num of images displayed in tensorboard (Should be <= batch size.)
+logger:
+  _target_: pytorch_lightning.loggers.TensorBoardLogger
+  save_dir: ${hydra:run.dir}
+  name: tensorboard_logs
+  version: ${experiment_name}

@@ -1,0 +1,35 @@
+net:
+  _target_: model_architecture.ha_gan.WGP_HAGAN
+
+architecture:
+  activation_dim: 64 
+  latent_dim: 1024 # type=int, dimensionality of the latent space
+  low_res_dim: 64
+  high_res_dim: 256
+  interpolation: trilinear # type=str, Interpolation method used for upsampling in the generator. Choose either 'nearest' or 'trilinear'
+  gen_h_norm: GroupNorm  # type=str, Set normalization technique for high-res generator. Choose between: 'GroupNorm' or 'BatchNorm'
+  subspace_slices: 32 # slice dim (3 dim) in the high resolut branch, it's fixed never change
+  disc_train_steps: 1 # TODO: replace with 5 in final version # paper is 5:1, type=int, if the number of iteration between generator and discriminator are not the same, here we update the discriminator every 'disc_train_steps' generator updates 
+  disc_iter: 1 # number of iterations in discriminator ie 5 means we loop 5 times in discriminator and 1 in generator
+  gen_iter: 5 # number of iterations in generator ie 5 means we loop 5 times in gen and 1 in discriminator (opposite of prev one)  
+  # options to train high/low resolution branches:
+  train_generators: ["all"] # define which generator (gen) to train (model includes 3 gen), possible options are ["gen_a","gen_l","gen_h", "all"] 
+  loss_fcn: "all" # specify if the loss fcn should include only high/low or both losses. possible options: ["low_res_only", "high_res_only", "all"]
+  # note: train_generators should be a list with one or more string from the allowed options
+  # "gen_a"=common generator,"gen_l"=low resolution generator,"gen_h"= high resolution generator, "all"= all generators
+  # the following 2 are used differently in ha_gan and ha_gan_test.py
+  g_high_res_loss_weight: 4 #  g_loss = g_loss_l + self.g_high_res_loss_weight * g_loss_h (in ha_gan.py) 
+  d_high_res_loss_weight: 1 # d_loss = d_loss_l + self.d_high_res_loss_weight * d_loss_h (in ha_gan.py)
+  
+
+conditions: [] # unconditional
+
+# Demographic conditioning
+# conditions:
+#   - gender_m0_f1
+#   - AGE_categ_int
+
+encoders:
+  add_encoder: False # type=boolean, Set flag order to add encoders and reconstruction loss to training
+  attach_encoder: False # default=False, Set flag to propagate reconstruction loss through Generators, like in the paper, in addition to adding the encoder, we do backpropagation on the encoders (the loss passes through the generator, maybe privacy risk)
+

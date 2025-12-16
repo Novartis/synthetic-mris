@@ -1,0 +1,20 @@
+# downloaded model from: https://drive.google.com/file/d/13tnSvXY7oDIEloNFiGTsjUIYfS3g3BfG/view
+medicalnet_model_weights: "./MedicalNet/pretrain/resnet_50_23dataset.pth"  
+
+main_evaluate_folder: ${hydra:run.dir}/evaluation_outputs
+data_embeddings: ${hydra:run.dir}/data_embeddings
+
+num_samples_to_plot: 8 # number of sample to generate for visual inspection
+synthetic_dataset_samples: 500 # number of synthetic data to generate
+
+dim_reduction_method: "umap" # should be a string, implemented options: 'umap', 'tsne' and 'mds'
+
+evaluate_low_resolution: True # boolean, set to true if you want to add the low resolution branch evaluation 
+
+# define epoch range to be used for the evaluation
+epochs:
+  min_epoch: 50
+  max_epoch: null
+  delta_epochs: 50
+
+save_space: True
